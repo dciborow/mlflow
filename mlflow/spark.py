@@ -101,6 +101,17 @@ def log_df_describe(df):
     Log the descbription of a DataFrame using the log_dict function.
     
     :param df: Input Dataframe to Log using mlflow.
+    
+    
+    >>> from pyspark.ml import Pipeline
+    >>> from pyspark.ml.classification import LogisticRegression
+    >>> from pyspark.ml.feature import HashingTF, Tokenizer
+    >>> training = spark.createDataFrame([
+    ...   (0, "a b c d e spark", 1.0),
+    ...   (1, "b d", 0.0),
+    ...   (2, "spark f g h", 1.0),
+    ...   (3, "hadoop mapreduce", 0.0) ], ["id", "text", "label"])
+    >>> mlflow.spark.log_df_describe(training)
     """
     stats_dict = json.loads(df.describe().toPandas().toJson())
     mlflow.log_dict(stats_dict)
