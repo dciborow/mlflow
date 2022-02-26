@@ -18,6 +18,7 @@ Spark MLlib (native) format
     ``mlflow/java`` package. This flavor is produced only if you specify
     MLeap-compatible arguments.
 """
+import json
 import os
 import logging
 import posixpath
@@ -93,6 +94,16 @@ def get_default_conda_env():
              dependency on PySpark version ``2.4.5``).
     """
     return _mlflow_conda_env(additional_pip_deps=get_default_pip_requirements())
+
+
+def log_df_describe(df):
+    """
+    Log the descbription of a DataFrame using the log_dict function.
+    
+    :param df: Input Dataframe to Log using mlflow.
+    """
+    stats_dict = json.loads(df.describe().toPandas().toJson())
+    mlflow.log_dict(stats_dict)
 
 
 @format_docstring(LOG_MODEL_PARAM_DOCS.format(package_name="pyspark"))
